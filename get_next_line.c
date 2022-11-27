@@ -6,7 +6,7 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 18:20:17 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/11/27 12:07:00 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/11/27 14:07:31 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	i;
 	size_t	c;
 
+	if (s1 == NULL)
+		s1 = "";
 	size_s1 = ft_strlen(s1);
 	size_s2 = ft_strlen(s2);
 	result = malloc(sizeof(char) * (size_s1 + size_s2 + 1));
@@ -74,9 +76,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	c = 0;
 	while (c < size_s2)
-	{
 		result[i++] = s2[c++];
-	}
 	result[i] = '\0';
 	return (result);
 }
@@ -94,8 +94,6 @@ char *extract_line(char *stash)
 	while (stash[size_line] != '\n')
 		size_line ++;
 	
-
-
 	line = (char *) malloc(sizeof(char) * (size_line + 2));
 	if (line == NULL)
 		return (NULL);
@@ -107,7 +105,8 @@ char *extract_line(char *stash)
 		i ++;
 	}
 	line[i] = '\0';
-
+	//free(stash);
+	
 	//printf("i = %d", i);
 	return line;
 
@@ -143,11 +142,12 @@ char	*trim_stash(char *stash)
 	tmp[i] = '\0';
 
 	
-	//free(tmp);
+	free(stash);
+	stash = tmp;
 
 
 
-	return tmp;
+	return stash;
 
 }
 
@@ -155,121 +155,37 @@ char *get_next_line(int fd)
 {
 
 	char		buf[BUFFER_SIZE + 1];
-	//char		*tmp;
+	char		*tmp;
 	static char	*stash;
 	int			rst;
 	char		*line;
 
-	stash = "";
+	//stash = "";
 	//tmp = "";
 
-	printf("-----------------1-------------------\n");
-	rst = read(fd, buf, BUFFER_SIZE);
-	buf[rst] = 0;
+	int c = 0;	
+	while (c < 3)
+	{
+		printf("-----------------%d-------------------\n", c);
+		rst = read(fd, buf, BUFFER_SIZE);
+		buf[rst] = 0;
 
-	//tmp = stash;
-	stash = ft_strjoin(stash, buf);
-	line = extract_line(stash);
-	stash = trim_stash(stash);
+		tmp = ft_strjoin(stash, buf);
+		free(stash);
+		stash = tmp;
+		line = extract_line(stash);
+		stash = trim_stash(stash);
 
-	printf("  rst = %d\n", rst);
-	printf("  buf = \"%s\"\n", buf);
-	printf("stash = \"%s\"\n", stash);
-	printf(" line = \"%s\"\n", line);
+		printf("  rst = %d\n", rst);
+		printf("  buf = \"%s\"  \n", buf);
+		printf("stash = \"%s\"\n", stash);
+		printf(" line = \"%s\"\n", line);
 
+		free(line);
+		c++;
+	}
 
-
-	
-	printf("-----------------2-------------------\n");
-	rst = read(fd, buf, BUFFER_SIZE);
-	buf[rst] = 0;
-
-	//tmp = stash;
-	stash = ft_strjoin(stash, buf);
-	line = extract_line(stash);
-	stash = trim_stash(stash);
-
-	printf("  rst = %d\n", rst);
-	printf("  buf = \"%s\"\n", buf);
-	printf("stash = \"%s\"\n", stash);
-	printf(" line = \"%s\"\n", line);
-	//free(tmp);
-
-
-
-	
-	printf("-----------------3-------------------\n");
-	rst = read(fd, buf, BUFFER_SIZE);
-	buf[rst] = 0;
-
-	//tmp = stash;
-	stash = ft_strjoin(stash, buf);
-	line = extract_line(stash);
-	stash = trim_stash(stash);
-
-	printf("  rst = %d\n", rst);
-	printf("  buf = \"%s\"\n", buf);
-	printf("stash = \"%s\"\n", stash);
-	printf(" line = \"%s\"\n", line);
-
-	//free(tmp);
-
-
-
-	printf("----------------4--------------------\n");
-	rst = read(fd, buf, BUFFER_SIZE);
-	buf[rst] = 0;
-
-	//tmp = stash;
-	stash = ft_strjoin(stash, buf);
-	line = extract_line(stash);
-	stash = trim_stash(stash);
-
-	printf("  rst = %d\n", rst);
-	printf("  buf = \"%s\"\n", buf);
-	printf("stash = \"%s\"\n", stash);
-	printf(" line = \"%s\"\n", line);
-
-	//free(tmp);
-
-
-
-	printf("----------------5--------------------\n");
-	rst = read(fd, buf, BUFFER_SIZE);
-	buf[rst] = 0;
-
-	//tmp = stash;
-	stash = ft_strjoin(stash, buf);
-	line = extract_line(stash);
-	stash = trim_stash(stash);
-
-	printf("  rst = %d\n", rst);
-	printf("  buf = \"%s\"\n", buf);
-	printf("stash = \"%s\"\n", stash);
-	printf(" line = \"%s\"\n", line);
-
-	//free(tmp);
-
-
-
-	printf("-----------------6-------------------\n");
-	rst = read(fd, buf, BUFFER_SIZE);
-	buf[rst] = 0;
-
-	//tmp = stash;
-	stash = ft_strjoin(stash, buf);
-	line = extract_line(stash);
-	stash = trim_stash(stash);
-
-	printf("  rst = %d\n", rst);
-	printf("  buf = \"%s\"\n", buf);
-	printf("stash = \"%s\"\n", stash);
-	printf(" line = \"%s\"\n", line);
-	
-	//free(tmp);
-	
-
-	return line;
+	return "ccc";
 }
 
 
@@ -281,9 +197,9 @@ int main (int argc, char *argv[])
 	int fd = open(argv[1], O_RDWR);         
 
 
-	char *test = get_next_line(fd);
+	get_next_line(fd);
 
-	free(test);
+	//free(test);
 
 	//int i = ft_strchr_gnl("0123456789", '5');
 
