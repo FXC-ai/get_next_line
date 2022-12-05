@@ -6,7 +6,7 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 18:20:17 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/05 15:13:44 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/05 17:54:06 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ char *get_next_line(int fd)
 	char		*line;
 
 
-	if (fd <= 0 || BUFFER_SIZE <= 0)
+
+	if (fd < 0 || BUFFER_SIZE <= 0 )
 	{
 		return (NULL);
 	}
@@ -108,16 +109,33 @@ char *get_next_line(int fd)
 	while ((rst = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		//rst = read(fd, buf, BUFFER_SIZE);
+		
 
 		buf[rst] = '\0';
+
+		//printf("buf = %s\n", buf);
+
+		
 		tmp = ft_strjoin(stash, buf); 
 		free(stash);				/*APRES AFFICHAGE DE LA DERNIERE LIGNE LA STASH A DEJA ETE FREE DU COUP SI ON RAPPEL LA FONCTION ON ESSAIE DE REFREE UN TRUC DEJA FREE*/
 		stash = ft_strdup(tmp);
 		free(tmp);
 
+
+
 	}
+
+	if (rst < 0)
+	{
+		free(stash);
+		stash = NULL;
+		return NULL;
+	}
+	
 	//lorsque la derniere ligne comporte un \n alors la stash n'est pas free et ça fait des leaks
 	//lor
+
+
 
 	if (stash != NULL && ft_strchr_n(stash) == 1)
 	{
@@ -125,10 +143,21 @@ char *get_next_line(int fd)
 		tmp = trim_stash(stash);
 
 		
-		free(stash);
+		if (stash != NULL)
+		{
+			free(stash);
+			stash = NULL;
+			/* code */
+		}
+		
 
+		//printf("sth = %s || %p\n", stash, stash);
 		
 		stash = ft_strdup(tmp);
+
+		//printf("sth = %s || %p\n",stash, stash);
+
+
 		free(tmp);
 		
 		if (stash[0] == '\0')
@@ -175,12 +204,10 @@ int main (int argc, char *argv[])
 		
 		if (line != NULL)
 		{
-			printf("Ligne numero %d : %s\n", i+1, line);
+			printf("Ligne numero %d : %s", i+1, line);
 			free(line);
 		}
 
-		
-		
 		i++;
 	}
 
