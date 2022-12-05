@@ -6,7 +6,7 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 18:20:17 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/05 22:07:21 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/05 21:34:32 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include<stdio.h> 
 #include <fcntl.h>
-//void check_leaks();
+void check_leaks();
 
 static int	ft_strchr_n(const char *s)
 {
@@ -109,6 +109,7 @@ char *get_next_line(int fd)
 	int			rst;
 	char		*line;
 
+
 	line = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0 )
 	{
@@ -117,11 +118,10 @@ char *get_next_line(int fd)
 	}
 	
 	rst = 0;
-	
-	rst = read(fd, buf, BUFFER_SIZE);
-	while (rst > 0)
+	while ((rst = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
 		buf[rst] = '\0';
+
 		tmp = ft_strjoin(stash, buf);
 		if (tmp == NULL)
 		{
@@ -130,11 +130,14 @@ char *get_next_line(int fd)
 			test(line, 3);
 			return NULL;
 		}
-		free(stash);	
+		
+
+		free(stash);				
 		stash = ft_strdup(tmp);
 		free(tmp);
-		rst = read(fd, buf, BUFFER_SIZE);
+
 	}
+
 	if (rst < 0)
 	{
 		free(stash);
@@ -182,9 +185,10 @@ char *get_next_line(int fd)
 	return (NULL);
 }
 
-int main (int argc, char *argv[]) 
+
+/*int main (int argc, char *argv[]) 
 {
-	(void) argv;
+
 	(void) argc;
 	
 
@@ -192,15 +196,8 @@ int main (int argc, char *argv[])
 
 	line = NULL;
 	
-	int fd = open("42_with_nl", O_RDWR);         
+	int fd = open(argv[1], O_RDWR);         
 
-	printf("[%s]", get_next_line(fd));
-	char c = 0;
-	read(fd, &c, 1);
-	printf("[%c]", c);
-	printf("[%s]", get_next_line(fd));
-
-	return (0);
 	int i = 0;
 	while (i < 9)
 	{
@@ -219,7 +216,7 @@ int main (int argc, char *argv[])
 	close(fd);
 
 
-	//check_leaks();
+	check_leaks();
 
     return 0; 
-}
+}*/
