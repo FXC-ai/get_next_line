@@ -6,7 +6,7 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 18:20:17 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/01 18:42:12 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/05 15:13:44 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,39 +98,50 @@ char *get_next_line(int fd)
 	int			rst;
 	char		*line;
 
-	if (fd <= 0)
+
+	if (fd <= 0 || BUFFER_SIZE <= 0)
 	{
 		return (NULL);
 	}
 	
-	rst = 1;
-	while (rst > 0)
+	rst = 0;
+	while ((rst = read(fd, buf, BUFFER_SIZE)) > 0)
 	{
-		rst = read(fd, buf, BUFFER_SIZE);
+		//rst = read(fd, buf, BUFFER_SIZE);
 
-		buf[rst] = 0;
-		if (rst > 0)
-		{
-			tmp = ft_strjoin(stash, buf);
-			free(stash);				/*APRES AFFICHAGE DE LA DERNIERE LIGNE LA STASH A DEJA ETE FREE DU COUP SI ON RAPPEL LA FONCTION ON ESSAIE DE REFREE UN TRUC DEJA FREE*/
-			stash = ft_strdup(tmp);
-			free(tmp);
-		}
+		buf[rst] = '\0';
+		tmp = ft_strjoin(stash, buf); 
+		free(stash);				/*APRES AFFICHAGE DE LA DERNIERE LIGNE LA STASH A DEJA ETE FREE DU COUP SI ON RAPPEL LA FONCTION ON ESSAIE DE REFREE UN TRUC DEJA FREE*/
+		stash = ft_strdup(tmp);
+		free(tmp);
+
 	}
-	
-	
+	//lorsque la derniere ligne comporte un \n alors la stash n'est pas free et ça fait des leaks
+	//lor
+
 	if (stash != NULL && ft_strchr_n(stash) == 1)
 	{
 		line = extract_line(stash);
 		tmp = trim_stash(stash);
+
+		
 		free(stash);
+
+		
 		stash = ft_strdup(tmp);
 		free(tmp);
+		
+		if (stash[0] == '\0')
+		{
+			free(stash);
+			stash = NULL;
+		}
+		
 		//free(tmp);
 		return (line);
 	}
-	
-	if (rst == 0 && ft_strlen(stash) > 0)
+
+	if (ft_strlen(stash) > 0)
 	{
 		//printf("stash = %s \n", stash);
 		line = ft_strdup(stash);
@@ -139,18 +150,21 @@ char *get_next_line(int fd)
 		//printf("line = %s \n", line);
 		return (line);
 	}
-		
+	
 	return (NULL);
 }
-
 
 /*
 int main (int argc, char *argv[]) 
 {
 
 	(void) argc;
+	
+
 	char *line;
 
+	line = NULL;
+	
 	int fd = open(argv[1], O_RDWR);         
 
 	int i = 0;
@@ -161,15 +175,22 @@ int main (int argc, char *argv[])
 		
 		if (line != NULL)
 		{
-			printf("Ligne numero %d : %s", i+1, line);
-			free(line);		
+			printf("Ligne numero %d : %s\n", i+1, line);
+			free(line);
 		}
+
+		
 		
 		i++;
 	}
 
 
 	close(fd);
+
+	//(void) argv;
+
+	//free(line);
+
 	check_leaks();
 
     return 0; 
