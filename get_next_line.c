@@ -6,7 +6,7 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 18:20:17 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/06 18:20:31 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/06 18:27:25 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ char *get_next_line(int fd)
 
 
 	line = NULL;
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd,0,0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 	{
 		check_ret("fd = ", fd);
 		return (NULL);
@@ -124,6 +124,11 @@ char *get_next_line(int fd)
 	
 
 	chr_read = save_buffer(fd, &buf);
+	if (chr_read == -1)
+	{
+		free(stash);
+		stash = NULL;
+	}
 	while (chr_read > 0)
 	{
 		tmp = ft_strjoin(stash, buf);
@@ -157,6 +162,12 @@ char *get_next_line(int fd)
 		}
 
 		chr_read = save_buffer(fd, &buf);
+		if (chr_read == -1)
+		{
+			free(stash);
+			stash = NULL;
+		}
+		
 	}
 
 	if (ft_strlen(stash) > 0 && ft_strchr(stash, '\n') != NULL)
