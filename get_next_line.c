@@ -6,7 +6,7 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 18:20:17 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/06 17:11:32 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/06 18:20:31 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,17 @@ void check_leaks();
 
 void	check_ret(char *check_s, int check_d)
 {
-	sleep(1);
+	//sleep(1);
 	static int count;
 
 	FILE* fd = fopen("/Users/fcoindre/Desktop/get_next_line_dev/logs", "a");
-
-	fprintf(fd, "%d : [%s] (%i)\n", count, check_s, check_d);
+	if (count == 0)
+	{
+		fprintf(fd, "\n\n\n");
+	}
+	
+	fprintf(fd, "--------- %d ---------\n", (count + 1));
+	fprintf(fd, "[%s] (%i)\n", check_s, check_d);
 	count ++;
 	fclose(fd);
 
@@ -122,6 +127,7 @@ char *get_next_line(int fd)
 	while (chr_read > 0)
 	{
 		tmp = ft_strjoin(stash, buf);
+
 		free(buf);
 		buf = NULL;
 
@@ -153,7 +159,7 @@ char *get_next_line(int fd)
 		chr_read = save_buffer(fd, &buf);
 	}
 
-	if (ft_strchr(stash, '\n') != NULL)
+	if (ft_strlen(stash) > 0 && ft_strchr(stash, '\n') != NULL)
 	{
 
 		line = extract_line(stash);
@@ -181,37 +187,53 @@ char *get_next_line(int fd)
 		line = ft_strdup(stash);
 		free(stash);
 		stash = NULL;
-
+		if (buf != NULL)
+		{
+			free(buf);
+			buf = NULL;
+		}
 		check_ret(line, 2);
 		return (line);
 	}
 	
+	if (ft_strlen(stash) == 0 && stash != NULL)
+	{
+		free(stash);
+		stash = NULL;
+	}
+	
+
+	if (buf != NULL)
+	{
+		free(buf);
+		buf = NULL;
+	}
+	
+
 	check_ret(line, 3);
 	return (NULL);	
 }
-
-
-
-
+/*
 int main()
 {
-	int fd = open("files/empty", O_RDWR);
+	//sleep(5);
+	int fd = open("files/41_no_nl", O_RDWR);
 
+	char	*line;
+	int count;
 
-	char	*line = get_next_line(fd);	
-	printf("line = '%s'", line);
-	free(line);
-	line = NULL;
-
-	printf("\n-----------------------\n");
-
-	line = get_next_line(fd);	
-	printf("line = '%s'", line);
-	free(line);
-	line = NULL;
+	count = 0;
+	while (count < 2)
+	{
+		line = get_next_line(fd);	
+		printf(" line %d : '%s'", count ,line);
+		free(line);
+		count ++;
+	}
+	
 
 	close(fd);
 
 	check_leaks();
 	return 0;
-}
+}*/
