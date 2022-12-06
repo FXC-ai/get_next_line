@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_dep.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 18:20:17 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/05 21:34:32 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/06 11:44:52 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,7 @@ char *get_next_line(int fd)
 }
 
 
-/*int main (int argc, char *argv[]) 
+int main (int argc, char *argv[]) 
 {
 
 	(void) argc;
@@ -219,4 +219,4 @@ char *get_next_line(int fd)
 	check_leaks();
 
     return 0; 
-}*/
+}

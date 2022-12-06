@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_dep.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 16:22:04 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/06 12:30:15 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/06 11:31:17 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ size_t	ft_strlen(const char *str)
 		return (0);
 	}
 	
+
 	count = 0;
 	while (*str != '\0')
 	{
@@ -81,60 +82,4 @@ char	*ft_strdup(const char *s1)
 	}
 	s1_dup[i] = '\0';
 	return (s1_dup);
-}
-
-void	*ft_calloc(size_t count, size_t size)
-{
-	size_t	i;
-	char	*result;
-
-	i = 0;
-	result = malloc(count * size);
-	if (result == NULL)
-		return (NULL);
-	while (i < count * size)
-	{
-		*(result + i) = 0;
-		i++;
-	}
-	return ((void *) result);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	char		caract;
-	size_t		i;
-	size_t		size_s;
-
-	i = 0;
-	caract = c;
-	size_s = ft_strlen(s);
-	while (i <= size_s)
-	{
-		if (s[i] == caract)
-		{
-			return ((char *) &s[i]);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	size_t	i;
-	char	*dst_cpy;
-	char	*src_cpy;
-
-	if (!dst && !src)
-		return (NULL);
-	dst_cpy = (char *) dst;
-	src_cpy = (char *) src;
-	i = 0;
-	while (i < n)
-	{
-		dst_cpy[i] = src_cpy[i];
-		i++;
-	}
-	return (dst);
 }

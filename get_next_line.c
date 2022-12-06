@@ -6,7 +6,7 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 18:20:17 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/05 22:07:21 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/06 17:11:32 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,37 @@
 
 #include<stdio.h> 
 #include <fcntl.h>
-//void check_leaks();
+void check_leaks();
 
-static int	ft_strchr_n(const char *s)
+void	check_ret(char *check_s, int check_d)
 {
-	int i;
+	sleep(1);
+	static int count;
 
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == '\n')
-		{
-			return (1);
-		}
-		i++;
-	}
-	return (0);
+	FILE* fd = fopen("/Users/fcoindre/Desktop/get_next_line_dev/logs", "a");
+
+	fprintf(fd, "%d : [%s] (%i)\n", count, check_s, check_d);
+	count ++;
+	fclose(fd);
+
+}
+
+int	save_buffer(int fd, char **buf)
+{
+	int		char_read;
+
+	*buf = ft_calloc((BUFFER_SIZE + 1), 1);
+	if (*buf == NULL)
+		return (0);
+
+	char_read = read(fd, *buf, BUFFER_SIZE);
+	//(*buf)[char_read] = '\0';
+
+	return (char_read);
 }
 
 static char *extract_line(char *stash)
 {
-
 	int		size_line;
 	char	*line;
 	int		i;
@@ -89,137 +99,119 @@ static char	*trim_stash(char *stash)
 	return tmp;
 
 }
-#include <stdio.h>
-void test(char *line, int lol)
-{
-	if (BUFFER_SIZE == 42)
-		sleep(1);
-	static int count;
-	FILE* fd = fopen("/Users/fcoindre/Desktop/get_next_line_dev/logs", "a");
-	fprintf(fd, "%d : [%s] (%i)\n", count,line, lol);
-	count ++;
-	fclose(fd);
-}
 
 char *get_next_line(int fd)
 {
-	char		buf[BUFFER_SIZE + 1];
-	char		*tmp;
+
+	char		*buf;
 	static char	*stash;
-	int			rst;
+	int			chr_read;
+	char		*tmp;
 	char		*line;
 
-	line = 0;
-	if (fd < 0 || BUFFER_SIZE <= 0 )
+
+	line = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd,0,0) < 0)
 	{
-		test(line, 5);
+		check_ret("fd = ", fd);
 		return (NULL);
 	}
 	
-	rst = 0;
-	
-	rst = read(fd, buf, BUFFER_SIZE);
-	while (rst > 0)
+
+	chr_read = save_buffer(fd, &buf);
+	while (chr_read > 0)
 	{
-		buf[rst] = '\0';
 		tmp = ft_strjoin(stash, buf);
-		if (tmp == NULL)
-		{
-			free(stash);
-			stash = NULL;
-			test(line, 3);
-			return NULL;
-		}
-		free(stash);	
-		stash = ft_strdup(tmp);
-		free(tmp);
-		rst = read(fd, buf, BUFFER_SIZE);
-	}
-	if (rst < 0)
-	{
+		free(buf);
+		buf = NULL;
+
 		free(stash);
 		stash = NULL;
-		test(line, 4);
-		return NULL;
+		stash = ft_strdup(tmp);
+
+		//printf("controle = %p\n", stash);
+		free(tmp);
+		tmp = NULL;
+
+		if (ft_strchr(stash, '\n') != NULL)
+		{
+
+			line = extract_line(stash);
+			tmp = trim_stash(stash);
+
+			free(stash);
+			stash = NULL;
+			stash = ft_strdup(tmp);
+
+			free(tmp);
+			tmp = NULL;
+
+			check_ret(line, 0);
+			return (line);
+		}
+
+		chr_read = save_buffer(fd, &buf);
 	}
-	
-	if (stash != NULL && ft_strchr_n(stash) == 1)
+
+	if (ft_strchr(stash, '\n') != NULL)
 	{
+
 		line = extract_line(stash);
 		tmp = trim_stash(stash);
 
-		if (stash != NULL)
-		{
-			free(stash);
-			stash = NULL;
-		}
+		free(stash);
+		stash = NULL;
 
 		stash = ft_strdup(tmp);
-
 		free(tmp);
-		
-		if (stash[0] == '\0')
+		tmp = NULL;
+
+		if (buf != NULL)
 		{
-			free(stash);
-			stash = NULL;
+			free(buf);
+			buf = NULL;
 		}
 		
-		test(line, 0);
+		check_ret(line, 1);
 		return (line);
 	}
 
-	if (ft_strlen(stash) > 0)
+	if (ft_strlen(stash) > 0 && ft_strchr(stash, '\n') == NULL)
 	{
-
 		line = ft_strdup(stash);
 		free(stash);
 		stash = NULL;
-		test(line, 1);
+
+		check_ret(line, 2);
 		return (line);
 	}
 	
-	test(line, 2);
-	return (NULL);
+	check_ret(line, 3);
+	return (NULL);	
 }
 
-int main (int argc, char *argv[]) 
+
+
+
+int main()
 {
-	(void) argv;
-	(void) argc;
-	
+	int fd = open("files/empty", O_RDWR);
 
-	char *line;
 
+	char	*line = get_next_line(fd);	
+	printf("line = '%s'", line);
+	free(line);
 	line = NULL;
-	
-	int fd = open("42_with_nl", O_RDWR);         
 
-	printf("[%s]", get_next_line(fd));
-	char c = 0;
-	read(fd, &c, 1);
-	printf("[%c]", c);
-	printf("[%s]", get_next_line(fd));
+	printf("\n-----------------------\n");
 
-	return (0);
-	int i = 0;
-	while (i < 9)
-	{
-
-		line = get_next_line(fd);
-		
-		if (line != NULL)
-		{
-			printf("Ligne numero %d : %s", i+1, line);
-			free(line);
-		}
-
-		i++;
-	}
+	line = get_next_line(fd);	
+	printf("line = '%s'", line);
+	free(line);
+	line = NULL;
 
 	close(fd);
 
-
-	//check_leaks();
-
-    return 0; 
+	check_leaks();
+	return 0;
 }
