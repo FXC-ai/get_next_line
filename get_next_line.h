@@ -6,7 +6,7 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/08 10:50:55 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/08 10:53:41 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/08 17:28:32 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,5 @@ char	*ft_strdup(const char *s1);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_strchr(const char *s, int c);
 char    *get_next_line(int fd);
+int     save_buffer(int fd, char **buf, char **stash);
 #endif

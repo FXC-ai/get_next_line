@@ -6,7 +6,7 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 16:22:04 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/08 10:46:56 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/08 17:14:54 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,23 +81,6 @@ char	*ft_strdup(const char *s1)
 	return (s1_dup);
 }
 
-void	*ft_calloc(size_t count, size_t size)
-{
-	size_t	i;
-	char	*result;
-
-	i = 0;
-	result = malloc(count * size);
-	if (result == NULL)
-		return (NULL);
-	while (i < count * size)
-	{
-		*(result + i) = 0;
-		i++;
-	}
-	return ((void *) result);
-}
-
 char	*ft_strchr(const char *s, int c)
 {
 	char		caract;
@@ -116,4 +99,27 @@ char	*ft_strchr(const char *s, int c)
 		i++;
 	}
 	return (NULL);
+}
+
+int	save_buffer(int fd, char **buf, char **stash)
+{
+	int		chr_read;
+	size_t	i;
+
+	*buf = malloc(BUFFER_SIZE + 1);
+	if (*buf == NULL)
+		return (0);
+	i = 0;
+	while (i < (BUFFER_SIZE + 1))
+	{
+		*(*buf + i) = 0;
+		i++;
+	}
+	chr_read = read(fd, *buf, BUFFER_SIZE);
+	if (chr_read == -1)
+	{
+		free(*stash);
+		*stash = NULL;
+	}
+	return (chr_read);
 }
