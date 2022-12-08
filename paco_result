@@ -1,73 +1,0 @@
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                Welcome to Francinette, a 42 tester framework!                ║
-╚═══════════════════════╦══════════════════════════════╦═══════════════════════╝
-                        ║         get_next_line        ║
-                        ╚══════════════════════════════╝
-⠋ Preparing framework⠙ Preparing framework⠹ Preparing framework⠸ Preparing framework⠼ Preparing framework⠴ Preparing framework⠦ Preparing framework⠧ Preparing framework✔ Preparing framework
-ℹ Running tests: gnlTester (https://github.com/Tripouille/gnlTester)
-[34m[Mandatory]
-[37m[BUFFER_SIZE = 1]: [0m
-[37mInvalid fd: [93m1.SIGSEGV
-[37mfiles/empty: [93m1.SIGSEGV
-[37mfiles/nl: [32m1.OK [31m2.KO [31mLEAKS.KO [0x7fdd12d04240 : 2] [0m
-[37mfiles/41_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/41_with_nl: [32m1.OK [32m2.OK [93m3.SIGSEGV
-[37mfiles/42_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/42_with_nl: [32m1.OK [32m2.OK [93m3.SIGSEGV
-[37mfiles/43_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/43_with_nl: [32m1.OK [32m2.OK [93m3.SIGSEGV
-[37mfiles/multiple_nlx5: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [31m6.KO [31mLEAKS.KO [0x7fdd12d04270 : 2] [0m
-[37mfiles/multiple_line_no_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [93m6.SIGSEGV
-[37mfiles/multiple_line_with_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [31m6.KO [31mLEAKS.KO [0x7fdd12f04120 : 2] [0m
-[37mfiles/alternate_line_nl_no_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [32m6.OK [32m7.OK [32m8.OK [32m9.OK [93m10.SIGSEGV
-[37mfiles/alternate_line_nl_with_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [32m6.OK [32m7.OK [32m8.OK [32m9.OK [31m10.KO [31mLEAKS.KO [0x7fdd12d04280 : 2] [0m
-[37mfiles/big_line_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/big_line_with_nl: [32m1.OK [31m2.KO [31mLEAKS.KO [0x7fdd12d040b0 : 2] [0m
-[37mstdin: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [32m6.OK [32m7.OK [32m8.OK [32m9.OK [31m10.KO [31mLEAKS.KO [0x7fdd14004110 : 2] [0m
-
-[37m[BUFFER_SIZE = 42]: [0m
-[37mInvalid fd: [93m1.SIGSEGV
-[37mfiles/empty: [93m1.SIGSEGV
-[37mfiles/nl: [32m1.OK [31m2.KO [31mLEAKS.KO [0x7fd23f504220 : 43] [0m
-[37mfiles/41_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/41_with_nl: [32m1.OK [32m2.OK [93m3.SIGSEGV
-[37mfiles/42_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/42_with_nl: [32m1.OK [32m2.OK [31m3.KO [31mLEAKS.KO [0x7fd23f604260 : 43] [0m
-[37mfiles/43_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/43_with_nl: [32m1.OK [32m2.OK [93m3.SIGSEGV
-[37mfiles/multiple_nlx5: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [31m6.KO [31mLEAKS.KO [0x7fd23f405840 : 43] [0m
-[37mfiles/multiple_line_no_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [93m6.SIGSEGV
-[37mfiles/multiple_line_with_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [31m6.KO [31mLEAKS.KO [0x7fd23f704080 : 43] [0m
-[37mfiles/alternate_line_nl_no_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [32m6.OK [32m7.OK [32m8.OK [32m9.OK [93m10.SIGSEGV
-[37mfiles/alternate_line_nl_with_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [32m6.OK [32m7.OK [32m8.OK [32m9.OK [31m10.KO [31mLEAKS.KO [0x7fd23f5042f0 : 43] [0m
-[37mfiles/big_line_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/big_line_with_nl: [32m1.OK [31m2.KO [31mLEAKS.KO [0x7fd23f604080 : 43] [0m
-[37mstdin: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [32m6.OK [32m7.OK [32m8.OK [32m9.OK [31m10.KO [31mLEAKS.KO [0x7fd23f7042f0 : 43] [0m
-
-[37m[BUFFER_SIZE = 10000000]: [0m
-[37mInvalid fd: [93m1.SIGSEGV
-[37mfiles/empty: [93m1.SIGSEGV
-[37mfiles/nl: [32m1.OK [31m2.KO [31mLEAKS.KO [0x7fcb60000000 : 10000001] [0m
-[37mfiles/41_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/41_with_nl: [32m1.OK [32m2.OK [93m3.SIGSEGV
-[37mfiles/42_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/42_with_nl: [32m1.OK [32m2.OK [93m3.SIGSEGV
-[37mfiles/43_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/43_with_nl: [32m1.OK [32m2.OK [93m3.SIGSEGV
-[37mfiles/multiple_nlx5: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [31m6.KO [31mLEAKS.KO [0x7fcb60000000 : 10000001] [0m
-[37mfiles/multiple_line_no_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [93m6.SIGSEGV
-[37mfiles/multiple_line_with_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [31m6.KO [31mLEAKS.KO [0x7fcb60000000 : 10000001] [0m
-[37mfiles/alternate_line_nl_no_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [32m6.OK [32m7.OK [32m8.OK [32m9.OK [93m10.SIGSEGV
-[37mfiles/alternate_line_nl_with_nl: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [32m6.OK [32m7.OK [32m8.OK [32m9.OK [31m10.KO [31mLEAKS.KO [0x7fcb60000000 : 10000001] [0m
-[37mfiles/big_line_no_nl: [32m1.OK [93m2.SIGSEGV
-[37mfiles/big_line_with_nl: [32m1.OK [31m2.KO [31mLEAKS.KO [0x7fcb60100000 : 10000001] [0m
-[37mstdin: [32m1.OK [32m2.OK [32m3.OK [32m4.OK [32m5.OK [32m6.OK [32m7.OK [32m8.OK [32m9.OK [31m10.KO [31mLEAKS.KO [0x7fcb60100000 : 10000001] [0m
-
-
-To see the tests open: /Users/fcoindre/francinette/tests/get_next_line/gnlTester/tests/mandatory.cpp
-
-
-Summary: no bonus
-
-Failed tests: gnlTester
-

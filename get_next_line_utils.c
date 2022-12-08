@@ -6,7 +6,7 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/27 16:22:04 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/06 12:30:15 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/08 10:46:56 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ size_t	ft_strlen(const char *str)
 	{
 		return (0);
 	}
-	
 	count = 0;
 	while (*str != '\0')
 	{
@@ -68,7 +67,6 @@ char	*ft_strdup(const char *s1)
 	{
 		return (NULL);
 	}
-	
 	s1_size = ft_strlen(s1);
 	s1_dup = malloc((s1_size + 1) * sizeof(char));
 	if (s1_dup == NULL)
@@ -118,23 +116,4 @@ char	*ft_strchr(const char *s, int c)
 		i++;
 	}
 	return (NULL);
-}
-
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	size_t	i;
-	char	*dst_cpy;
-	char	*src_cpy;
-
-	if (!dst && !src)
-		return (NULL);
-	dst_cpy = (char *) dst;
-	src_cpy = (char *) src;
-	i = 0;
-	while (i < n)
-	{
-		dst_cpy[i] = src_cpy[i];
-		i++;
-	}
-	return (dst);
 }

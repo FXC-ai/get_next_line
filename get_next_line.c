@@ -6,32 +6,30 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 18:20:17 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/06 18:27:25 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/08 16:05:12 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
+//void check_leaks();
 #include<stdio.h> 
-#include <fcntl.h>
-void check_leaks();
 
-void	check_ret(char *check_s, int check_d)
+
+void	*ft_calloc(size_t count, size_t size)
 {
-	//sleep(1);
-	static int count;
+	size_t	i;
+	char	*result;
 
-	FILE* fd = fopen("/Users/fcoindre/Desktop/get_next_line_dev/logs", "a");
-	if (count == 0)
+	i = 0;
+	result = malloc(count * size);
+	if (result == NULL)
+		return (NULL);
+	while (i < count * size)
 	{
-		fprintf(fd, "\n\n\n");
+		*(result + i) = 0;
+		i++;
 	}
-	
-	fprintf(fd, "--------- %d ---------\n", (count + 1));
-	fprintf(fd, "[%s] (%i)\n", check_s, check_d);
-	count ++;
-	fclose(fd);
-
+	return ((void *) result);
 }
 
 int	save_buffer(int fd, char **buf)
@@ -41,23 +39,21 @@ int	save_buffer(int fd, char **buf)
 	*buf = ft_calloc((BUFFER_SIZE + 1), 1);
 	if (*buf == NULL)
 		return (0);
-
 	char_read = read(fd, *buf, BUFFER_SIZE);
-	//(*buf)[char_read] = '\0';
-
 	return (char_read);
 }
 
-static char *extract_line(char *stash)
+static char	*extract_line(char *stash)
 {
 	int		size_line;
 	char	*line;
 	int		i;
 
-	size_line = 0;	
+	size_line = 0;
 	while (stash[size_line] != '\n' && stash[size_line] != '\0')
+	{
 		size_line ++;
-	
+	}
 	line = (char *) malloc(sizeof(char) * (size_line + 2));
 	if (line == NULL)
 		return (NULL);
@@ -68,61 +64,78 @@ static char *extract_line(char *stash)
 		i ++;
 	}
 	line[i] = '\0';
-	return line;
+	return (line);
 }
 
 static char	*trim_stash(char *stash)
 {
-
-	size_t	size_line = 0;
-	size_t	size_stash = 0;
+	size_t	size_line;
+	size_t	size_stash;
 	int		i;
 	char	*tmp;
+	size_t	montre;
 
-	size_line = 0;	
+	size_stash = 0;
+	size_line = 0;
 	while (stash[size_line] != '\n')
 		size_line ++;
-
-
 	size_stash = ft_strlen(stash);
-
-	size_t montre = size_stash - size_line;
-
+	montre = size_stash - size_line;
 	tmp = (char *) malloc(sizeof(char) * (montre));
 	if (tmp == NULL)
 		return (NULL);
-
 	i = 0;
 	while (stash[i + size_line + 1] != '\0')
 	{
 		tmp[i] = stash[i + size_line + 1];
 		i++;
 	}
-	
 	tmp[i] = '\0';
-
-	return tmp;
-
+	return (tmp);
 }
 
-char *get_next_line(int fd)
+int	get_next_line_1(char **line, char **stash, char **tmp, char **buf)
 {
+	if (ft_strlen(*stash) == 0 && *stash != NULL)
+	{
+		free(*stash);
+		*stash = NULL;
+	}
+	if (ft_strlen(*stash) > 0 && ft_strchr(*stash, '\n') != NULL)
+	{
+		*line = extract_line(*stash);
+		*tmp = trim_stash(*stash);
+		free(*stash);
+		*stash = ft_strdup(*tmp);
+		free(*tmp);
+		if (*buf != NULL)
+		{
+			free(*buf);
+		}
+		return (1);
+	}
+	if (ft_strlen(*stash) > 0 && ft_strchr(*stash, '\n') == NULL)
+	{
+		*line = ft_strdup(*stash);
+		free(*stash);
+		*stash = NULL;
+		if (*buf != NULL)
+			free(*buf);
+		return (1);
+	}
+	return (0);
+}
 
+char	*get_next_line(int fd)
+{
 	char		*buf;
 	static char	*stash;
 	int			chr_read;
 	char		*tmp;
 	char		*line;
 
-
-	line = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
-	{
-		check_ret("fd = ", fd);
 		return (NULL);
-	}
-	
-
 	chr_read = save_buffer(fd, &buf);
 	if (chr_read == -1)
 	{
@@ -132,99 +145,37 @@ char *get_next_line(int fd)
 	while (chr_read > 0)
 	{
 		tmp = ft_strjoin(stash, buf);
-
 		free(buf);
-		buf = NULL;
-
 		free(stash);
-		stash = NULL;
 		stash = ft_strdup(tmp);
-
-		//printf("controle = %p\n", stash);
 		free(tmp);
-		tmp = NULL;
-
-		if (ft_strchr(stash, '\n') != NULL)
+		
+		if (ft_strlen(stash) > 0 && ft_strchr(stash, '\n') != NULL)
 		{
-
 			line = extract_line(stash);
 			tmp = trim_stash(stash);
-
 			free(stash);
-			stash = NULL;
 			stash = ft_strdup(tmp);
-
 			free(tmp);
-			tmp = NULL;
-
-			check_ret(line, 0);
 			return (line);
 		}
-
 		chr_read = save_buffer(fd, &buf);
 		if (chr_read == -1)
-		{
 			free(stash);
-			stash = NULL;
-		}
-		
 	}
 
-	if (ft_strlen(stash) > 0 && ft_strchr(stash, '\n') != NULL)
-	{
-
-		line = extract_line(stash);
-		tmp = trim_stash(stash);
-
-		free(stash);
-		stash = NULL;
-
-		stash = ft_strdup(tmp);
-		free(tmp);
-		tmp = NULL;
-
-		if (buf != NULL)
-		{
-			free(buf);
-			buf = NULL;
-		}
-		
-		check_ret(line, 1);
+	if (get_next_line_1(&line, &stash, &tmp, &buf) == 1)
 		return (line);
-	}
-
-	if (ft_strlen(stash) > 0 && ft_strchr(stash, '\n') == NULL)
-	{
-		line = ft_strdup(stash);
-		free(stash);
-		stash = NULL;
-		if (buf != NULL)
-		{
-			free(buf);
-			buf = NULL;
-		}
-		check_ret(line, 2);
-		return (line);
-	}
-	
-	if (ft_strlen(stash) == 0 && stash != NULL)
-	{
-		free(stash);
-		stash = NULL;
-	}
-	
 
 	if (buf != NULL)
-	{
 		free(buf);
-		buf = NULL;
-	}
-	
-
-	check_ret(line, 3);
-	return (NULL);	
+	return (NULL);
 }
+
+
 /*
+#include <fcntl.h>
+
 int main()
 {
 	//sleep(5);
@@ -245,6 +196,6 @@ int main()
 
 	close(fd);
 
-	check_leaks();
+	//check_leaks();
 	return 0;
 }*/
