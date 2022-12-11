@@ -6,7 +6,7 @@
 /*   By: fcoindre <fcoindre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 18:20:17 by fcoindre          #+#    #+#             */
-/*   Updated: 2022/12/08 17:52:34 by fcoindre         ###   ########.fr       */
+/*   Updated: 2022/12/11 15:47:19 by fcoindre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static char	*trim_stash(char *stash)
 	return (tmp);
 }
 
-int	get_next_line_0(char **line, char **stash, char **tmp, char **buf)
+static int	get_next_line_0(char **line, char **stash, char **tmp, char **buf)
 {
 	*tmp = ft_strjoin(*stash, *buf);
 	free(*buf);
@@ -134,30 +134,4 @@ char	*get_next_line(int fd)
 	if (buf != NULL)
 		free(buf);
 	return (NULL);
-}
-
-
-#include <stdio.h>
-#include <fcntl.h>
-int main()
-{
-
-	int fd = open("test", O_RDWR);
-
-	char	*line;
-	int count;
-
-	line = "";
-	count = 0;
-	while (line != NULL)
-	{
-		line = get_next_line(fd);
-		printf(" line %d : '%s'", count ,line);
-		free(line);
-		count ++;
-	}
-
-
-	close(fd);
-	return 0;
 }
